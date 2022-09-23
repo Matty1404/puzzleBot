@@ -58,12 +58,23 @@ class gameBot:
                 [w, w, g, w, g, b, g, g, w, w, w, w],
                 [w, w, g, g, g, g, g, g, w, w, w, w],
                 [w, w, w, w, g, b, g, g, w, w, w, w],
-                [w, w, w, w, w, w, w, w, w, w, w, w]], 1, 1)
+                [w, w, w, w, w, w, w, w, w, w, w, w]], 1, 1), 
+
+    "level5" : ([[w, w, w, w, w, w, w, w, w, w, w, w],
+                 [w, p, g, g, g, g, w, w, w, w, w, w],
+                 [w, g, g, b, g, g, w, w, w, w, w, w],
+                 [w, g, g, g, g, h, w, w, w, w, w, w],
+                 [w, w, g, h, g, h, h, g, g, g, e, w],
+                 [w, w, g, h, g, h, g, h, w, w, w, w],
+                 [w, w, g, h, g, h, g, h, h, h, w, w],
+                 [w, w, g, g, g, g, g, g, g, h, w, w],
+                 [w, w, g, g, h, h, g, g, g, h, w, w],
+                 [w, w, w, w, w, w, w, w, w, w, w, w]], 1, 1)
   
   }
 
   levelArray = ["level1", "level2", "level3", "level4", "level5"]
-  currLevel = levelArray[3]
+  currLevel = levelArray[0]
   yPos = levels[currLevel][1]
   xPos = levels[currLevel][2]
   currBoard = copy.deepcopy(levels[currLevel][0])
@@ -199,10 +210,14 @@ class gameBot:
           await self.msg.edit(content = self.genBoard())
 
   def nextLevel(self):
-    self.currLevel = self.levelArray[self.levelArray.index(self.currLevel) + 1]
-    self.yPos = self.levels[self.currLevel][1]
-    self.xPos = self.levels[self.currLevel][2]
-    self.currBoard = copy.deepcopy(self.levels[self.currLevel][0])
+    level = self.levelArray.index(self.currLevel) + 1
+    if level < len(self.levelArray):
+      self.currLevel = self.levelArray[level]
+      self.yPos = self.levels[self.currLevel][1]
+      self.xPos = self.levels[self.currLevel][2]
+      self.currBoard = copy.deepcopy(self.levels[self.currLevel][0])
+    else:
+      print("congrats")
 
 bot = gameBot(os.environ['DTOKEN'])
 
