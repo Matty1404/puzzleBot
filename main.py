@@ -2,56 +2,63 @@ import discord
 from discord.ext import commands
 from discord import Intents
 
-bot = commands.Bot(command_prefix='.', intents=Intents.all())
 
-level1 = [['#','#','#','#','#','#','#'],
-          ['#','#','#','   ','   ','   ','P'],
-          ['#','#','#','   ','#','#','#'],
-          ['#','#','#','   ','#','#','#'],
-          ['#','E','   ','   ','#','#','#'],
-          ['#','#','#','#','#','#','#'],
-          ['#','#','#','#','#','#','#']
-         ]
+class gameBot:
+    level1 = ([['#', '#', '#', '#', '#', '#', '#'],
+               ['#', '#', '#', '   ', '   ', '   ', 'P'],
+               ['#', '#', '#', '   ', '#', '#', '#'],
+               ['#', '#', '#', '   ', '#', '#', '#'],
+               ['#', 'E', '   ', '   ', '#', '#', '#'],
+               ['#', '#', '#', '#', '#', '#', '#'],
+               ['#', '#', '#', '#', '#', '#',
+                '#']], 1, 6)  #stores y and x value
+    currLevel = level1
+    YPos = currLevel[1]
+    XPos = currLevel[2]
+    currBoard = currLevel
 
-currLevel = level1
+    def __init__(self, token):
+        self.token = token
+        self.bot = commands.Bot(command_prefix="!", intents=Intents.all())
 
-currBoard = currLevel
+    async def on_ready(self):
+        print("logged in as {0.user}".format(self))
 
-@bot.event
-async def on_ready():
-    print("logged in as {0.user}".format(bot))
+    def run(self):
+        self.bot.run(self.token)
 
-@bot.command()
-async def newGame(ctx):
-  board = ""
-  for row in level1:
-    for item in row:
-      board += item
-    board += '\n'
-    
-  msg = await ctx.reply(board) 
-  await msg.add_reaction("⬅️")
-  await msg.add_reaction("⬆️")
-  await msg.add_reaction("⬇️")
-  await msg.add_reaction("➡️")
-  await msg.add_reaction("🛑")
-  
+    def newGame(self):
 
-@bot.event
-async def on_reaction_add(reaction, user):
-    if user != bot.user:
-        if str(reaction.emoji) == "➡️":
-            
-        elif str(reaction.emoji) == "⬅️":
+        @self.bot.command()
+        async def newGame(ctx):
+            board = ""
+            for row in self.currLevel:
+                for item in row:
+                    board += item
+                board += '\n'
 
-        elif str(reaction.emoji) == "⬆️":
+            msg = await ctx.reply(board)
+            await msg.add_reaction("⬅️")
+            await msg.add_reaction("⬆️")
+            await msg.add_reaction("⬇️")
+            await msg.add_reaction("➡️")
+            await msg.add_reaction("🛑")
 
-        elif str(reaction.emoji) == "⬇️":
+    async def on_reaction_add(self, reaction, user):
+        if user != self.user:
 
-        elif str(reaction.emoji) == "🛑":
-          
-        await reaction.remove(user)
+            # if str(reaction.emoji) == "➡️":
+
+            # elif str(reaction.emoji) == "⬅️":
+
+            # elif str(reaction.emoji) == "⬆️":
+
+            # elif str(reaction.emoji) == "⬇️":
+
+            # elif str(reaction.emoji) == "🛑":
+
+            await reaction.remove(user)
 
 
-bot.run(
-    "MTAyMjU4MjI4NDIzNjM3ODE1Mg.GUpnGv.S5XW3qqETgNDwwcjzrT9tGb33lLvGTPkP5ugpw")
+bot = gameBot('MTAyMjgxNjExODg3Mzc5MjU2Mg.GrjdKD.gDfHtJHK7k5Qly2kwGMT-mU4AGV0yBq4ong2BA')
+bot.run()
